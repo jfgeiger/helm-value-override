@@ -1,0 +1,32 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: busybox
+  namespace: {{ .Release.Namespace }}
+  labels:
+    app: busybox
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: busybox
+  template:
+    metadata:
+      labels:
+        app: busybox
+    spec:
+      containers:
+        - name: busybox
+          image: busybox
+          env:
+            - name: first
+              value: {{ .Values.first }}
+            - name: second
+              value: {{ .Values.second }}
+          imagePullPolicy: IfNotPresent
+          command:
+            - sh
+            - -c
+            - |
+              echo $first ", " $second
+              sleep 100000
